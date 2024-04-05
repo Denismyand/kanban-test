@@ -1,12 +1,17 @@
 import { useState } from "react";
 import "./App.css";
 import { validateGhLink } from "./utils/validateGhLink";
+import { Flex, Button, Input } from "antd";
+import { Issues } from "./modules/issues";
+import { Issue } from "./utils/types";
 
 function App() {
   const [ghLink, setGhLink] = useState("");
 
   const [repoOwner, setRepoOwner] = useState<string | null>(null);
   const [repoName, setRepoName] = useState<string | null>(null);
+
+  const [shownIssues, setShownIssues] = useState<Issue[]>([]);
 
   const handleClick = () => {
     const valResult = validateGhLink(ghLink);
@@ -22,7 +27,11 @@ function App() {
       .then((data) => {
         setRepoOwner(owner);
         setRepoName(repo);
-        console.log(data);
+        setShownIssues(data);
+        const obj: any = Object;
+        console.log(
+          obj.groupBy(data, ({ state }: { state: boolean }) => state)
+        );
       })
       .catch((error) => {
         setRepoOwner(null);
@@ -31,23 +40,28 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <input
-        placeholder="Enter repo URL"
-        value={ghLink}
-        onChange={(e) => {
-          setGhLink(e.target.value);
-        }}
-      />
-      <button onClick={handleClick}>Load issues</button>
-      {repoName && repoOwner && (
-        <div>
+    <Flex gap={"middle"} vertical className={"app"}>
+      <Flex gap={"middle"}>
+        <Input
+          placeholder="Enter repo URL"
+          value={ghLink}
+          onChange={(e) => {
+            setGhLink(e.target.value);
+          }}
+        />
+        <Button onClick={handleClick}>Load issues</Button>
+      </Flex>
+      {repoName && repoOwner ? (
+        <Flex gap={5}>
           <a href={`https://github.com/${repoOwner}`}>{repoOwner}</a>
-          {" > "}
+          {"/"}
           <a href={`https://github.com/${repoOwner}/${repoName}`}>{repoName}</a>
-        </div>
+        </Flex>
+      ) : (
+        <p>No issues loaded</p>
       )}
-    </div>
+      <Issues shownIssues={shownIssues} />
+    </Flex>
   );
 }
 
