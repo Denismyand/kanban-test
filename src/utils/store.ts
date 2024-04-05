@@ -5,21 +5,21 @@ type IssuesStore = {
   todoIssues: Issue[];
   inProgressIssues: Issue[];
   doneIssues: Issue[];
+  repoOwner: null | string;
+  repoName: null | string;
   setTodoIssues: (issues: Issue[]) => void;
   setInProgressIssues: (issues: Issue[]) => void;
   setDoneIssues: (issues: Issue[]) => void;
-};
-
-type RepoStore = {
-  repoOwner: null | string;
-  repoName: null | string;
   setRepo: (owner: null | string, repo: null | string) => void;
+  updateStoredRepo: () => void;
 };
 
 export const useIssuesStore = create<IssuesStore>((set) => ({
   todoIssues: [],
   inProgressIssues: [],
   doneIssues: [],
+  repoOwner: null,
+  repoName: null,
   setTodoIssues: (newTodoIssues) => {
     set(() => ({ todoIssues: newTodoIssues }));
   },
@@ -29,12 +29,20 @@ export const useIssuesStore = create<IssuesStore>((set) => ({
   setDoneIssues: (newDoneIssues) => {
     set(() => ({ doneIssues: newDoneIssues }));
   },
-}));
-
-export const useRepo = create<RepoStore>((set) => ({
-  repoOwner: null,
-  repoName: null,
   setRepo: (owner, repo) => {
     set(() => ({ repoOwner: owner, repoName: repo }));
   },
+  updateStoredRepo: () => {
+    set((state) => {
+      saveIssues(`${state.repoOwner}/${state.repoName}`, [
+        ...state.todoIssues,
+        ...state.inProgressIssues,
+        ...state.doneIssues,
+      ]);
+      return state;
+    });
+  },
 }));
+
+const saveIssues = (key: string, issues: Issue[]) =>
+  window.localStorage.setItem(key, JSON.stringify(issues));

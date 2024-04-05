@@ -7,9 +7,7 @@ import { IssueColumn } from "../issueColumn";
 
 export const Issues = () => {
   const todoIssues = useIssuesStore((state) => state.todoIssues);
-
   const inProgressIssues = useIssuesStore((state) => state.inProgressIssues);
-
   const doneIssues = useIssuesStore((state) => state.doneIssues);
 
   const setTodoIssues = useIssuesStore((state) => state.setTodoIssues);
@@ -17,6 +15,8 @@ export const Issues = () => {
     (state) => state.setInProgressIssues
   );
   const setDoneIssues = useIssuesStore((state) => state.setDoneIssues);
+
+  const updateStoredRepo = useIssuesStore((state) => state.updateStoredRepo);
 
   const handleDragEnd = (result: any) => {
     const { destination, source, draggableId } = result;
@@ -32,6 +32,7 @@ export const Issues = () => {
     if (!issue) return;
 
     setNewState(destination.droppableId, issue, destination.index);
+    updateStoredRepo();
   };
 
   function deletePreviousState(sourceDroppableId: string, issueNumber: number) {

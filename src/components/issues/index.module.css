@@ -2,4 +2,8 @@
   width: 100%;
   max-height: calc(100% - 88px);
   flex-grow: 1;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
 }

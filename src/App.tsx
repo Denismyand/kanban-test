@@ -4,15 +4,16 @@ import { validateGhLink } from "./utils/validateGhLink";
 import { Flex, Button, Input } from "antd";
 import { Issues } from "./components/issues";
 import { Issue } from "./utils/types";
-import { useIssuesStore, useRepo } from "./utils/store";
+import { useIssuesStore } from "./utils/store";
 
 function App() {
   const [ghLink, setGhLink] = useState("");
 
-  const repoOwner = useRepo((state) => state.repoOwner);
-  const repoName = useRepo((state) => state.repoName);
+  const repoOwner = useIssuesStore((state) => state.repoOwner);
+  const repoName = useIssuesStore((state) => state.repoName);
 
-  const setRepo = useRepo((state) => state.setRepo);
+  const setRepo = useIssuesStore((state) => state.setRepo);
+  const updateStoredRepo = useIssuesStore((state) => state.updateStoredRepo);
 
   const setTodoIssues = useIssuesStore((state) => state.setTodoIssues);
   const setInProgressIssues = useIssuesStore(
@@ -55,7 +56,7 @@ function App() {
         setRepo(owner, repo);
 
         splitIssues(data);
-        localStorage.setItem(key, JSON.stringify(data));
+        updateStoredRepo();
       })
       .catch((error) => {
         setRepo(null, null);
