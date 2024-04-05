@@ -1,0 +1,13 @@
+.issue {
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+}
+.dragging {
+  background-color: #efefef;
+}
