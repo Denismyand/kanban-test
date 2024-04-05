@@ -20,7 +20,7 @@ export const Issues = () => {
 
   const handleDragEnd = (result: any) => {
     const { destination, source, draggableId } = result;
-    if (!destination || source.droppableId === destination.droppableId) return;
+    if (!destination) return;
 
     deletePreviousState(source.droppableId, draggableId);
 
@@ -56,21 +56,27 @@ export const Issues = () => {
   ) {
     let updatedIssue: Issue;
     switch (destinationDroppableId) {
-      case "1": // TO DO
+      case "1":
         updatedIssue = { ...issue, state: "open" };
-        let newTodos = [...todoIssues];
+        let newTodos = todoIssues.filter(
+          (todo) => issue.number !== todo.number
+        );
         newTodos.splice(index, 0, updatedIssue);
         setTodoIssues(newTodos);
         break;
-      case "2": // IN PROGRESS
+      case "2":
         updatedIssue = { ...issue, state: "in progress" };
-        let newInProgress = [...inProgressIssues];
+        let newInProgress = inProgressIssues.filter(
+          (todo) => issue.number !== todo.number
+        );
         newInProgress.splice(index, 0, updatedIssue);
         setInProgressIssues(newInProgress);
         break;
-      case "3": // DONE
+      case "3":
         updatedIssue = { ...issue, state: "done" };
-        let newDoneIssues = [...doneIssues];
+        let newDoneIssues = doneIssues.filter(
+          (todo) => issue.number !== todo.number
+        );
         newDoneIssues.splice(index, 0, updatedIssue);
         setDoneIssues(newDoneIssues);
         break;
@@ -78,11 +84,11 @@ export const Issues = () => {
   }
 
   function findItemById(id: number, array: Issue[]) {
-    return array.find((issue) => issue.number == id);
+    return array.find((issue) => issue.number === Number(id));
   }
 
   function removeItemById(id: number, array: Issue[]) {
-    return array.filter((issue) => issue.number != id);
+    return array.filter((issue) => issue.number !== Number(id));
   }
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
