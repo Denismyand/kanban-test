@@ -1,7 +1,7 @@
 import { Flex } from "antd";
 import { Issue } from "../../utils/types";
 import styles from "./index.module.css";
-import { IssueItem } from "../issueItem";
+import { IssueItem } from "../IssueItem";
 import { Droppable } from "react-beautiful-dnd";
 
 type ColumnProps = {

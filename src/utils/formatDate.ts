@@ -1,4 +1,4 @@
-export function formatDate(dateString: string) {
+export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const currentDate = new Date();
   const differenceInMilliseconds = currentDate.getTime() - date.getTime();
@@ -13,4 +13,4 @@ export function formatDate(dateString: string) {
   } else {
     return `opened ${differenceInDays} days ago`;
   }
-}
+};

@@ -1,9 +1,9 @@
 import { Flex } from "antd";
 import styles from "./index.module.css";
+import { Issue, IssueState } from "../../utils/types";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { IssueColumn } from "../IssueColumn";
 import { useIssuesStore } from "../../utils/store";
-import { Issue } from "../../utils/types";
-import { DragDropContext } from "react-beautiful-dnd";
-import { IssueColumn } from "../issueColumn";
 
 export const Issues = () => {
   const todoIssues = useIssuesStore((state) => state.todoIssues);
@@ -18,7 +18,7 @@ export const Issues = () => {
 
   const updateStoredRepo = useIssuesStore((state) => state.updateStoredRepo);
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
 
@@ -35,7 +35,10 @@ export const Issues = () => {
     updateStoredRepo();
   };
 
-  function deletePreviousState(sourceDroppableId: string, issueNumber: number) {
+  const deletePreviousState = (
+    sourceDroppableId: string,
+    issueNumber: string
+  ) => {
     switch (sourceDroppableId) {
       case "1":
         setTodoIssues(removeItemById(issueNumber, todoIssues));
@@ -47,49 +50,53 @@ export const Issues = () => {
         setDoneIssues(removeItemById(issueNumber, doneIssues));
         break;
     }
-  }
+  };
 
-  function setNewState(
+  const setNewState = (
     destinationDroppableId: string,
     issue: Issue,
     index: number
-  ) {
-    let updatedIssue: Issue;
+  ) => {
     switch (destinationDroppableId) {
       case "1":
-        updatedIssue = { ...issue, state: "open" };
-        let newTodos = todoIssues.filter(
-          (todo) => issue.number !== todo.number
-        );
-        newTodos.splice(index, 0, updatedIssue);
+        const newTodos = prepareNewState(issue, "open", todoIssues, index);
         setTodoIssues(newTodos);
         break;
       case "2":
-        updatedIssue = { ...issue, state: "in progress" };
-        let newInProgress = inProgressIssues.filter(
-          (todo) => issue.number !== todo.number
+        let newInProgress = prepareNewState(
+          issue,
+          "in progress",
+          inProgressIssues,
+          index
         );
-        newInProgress.splice(index, 0, updatedIssue);
         setInProgressIssues(newInProgress);
         break;
       case "3":
-        updatedIssue = { ...issue, state: "done" };
-        let newDoneIssues = doneIssues.filter(
-          (todo) => issue.number !== todo.number
-        );
-        newDoneIssues.splice(index, 0, updatedIssue);
+        let newDoneIssues = prepareNewState(issue, "done", doneIssues, index);
         setDoneIssues(newDoneIssues);
         break;
     }
-  }
+  };
 
-  function findItemById(id: number, array: Issue[]) {
+  const prepareNewState = (
+    issue: Issue,
+    state: IssueState,
+    issues: Issue[],
+    index: number
+  ) => {
+    let updatedIssue = { ...issue, state: state };
+    let newState = issues.filter((todo) => todo.number !== issue.number);
+    newState.splice(index, 0, updatedIssue);
+    return newState;
+  };
+
+  const findItemById = (id: string, array: Issue[]) => {
     return array.find((issue) => issue.number === Number(id));
-  }
+  };
 
-  function removeItemById(id: number, array: Issue[]) {
+  const removeItemById = (id: string, array: Issue[]) => {
     return array.filter((issue) => issue.number !== Number(id));
-  }
+  };
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Flex gap={30} className={styles.issueTable}>

@@ -2,7 +2,7 @@ interface UserInfo {
   login: string;
   html_url: string;
 }
-type IssueState = "open" | "in progress" | "done";
+export type IssueState = "open" | "in progress" | "done";
 export interface Issue {
   title: string;
   number: number;

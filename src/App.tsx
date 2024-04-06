@@ -2,11 +2,11 @@ import { useState } from "react";
 import "./App.css";
 import { validateGhLink } from "./utils/validateGhLink";
 import { Flex, Button, Input } from "antd";
-import { Issues } from "./components/issues";
+import { Issues } from "./components/Issues";
 import { Issue } from "./utils/types";
 import { useIssuesStore } from "./utils/store";
 
-function App() {
+const App = () => {
   const [ghLink, setGhLink] = useState("");
 
   const repoOwner = useIssuesStore((state) => state.repoOwner);
@@ -21,7 +21,7 @@ function App() {
   );
   const setDoneIssues = useIssuesStore((state) => state.setDoneIssues);
 
-  const handleClick = () => {
+  const handleEnterLink = () => {
     const valResult = validateGhLink(ghLink);
     if (!valResult) {
       return;
@@ -29,7 +29,7 @@ function App() {
     requestReposIssues(valResult.owner, valResult.repo);
   };
 
-  function splitIssues(issues: Issue[]) {
+  const splitIssues = (issues: Issue[]) => {
     const todoIssues = issues.filter((issue) => issue.state === "open");
     const inProgressIssues = issues.filter(
       (issue) => issue.state === "in progress"
@@ -39,7 +39,7 @@ function App() {
     setTodoIssues(todoIssues);
     setInProgressIssues(inProgressIssues);
     setDoneIssues(doneIssues);
-  }
+  };
 
   const requestReposIssues = (owner: string, repo: string) => {
     const key = `${owner}/${repo}`;
@@ -72,8 +72,9 @@ function App() {
           onChange={(e) => {
             setGhLink(e.target.value);
           }}
+          onPressEnter={handleEnterLink}
         />
-        <Button onClick={handleClick}>Load issues</Button>
+        <Button onClick={handleEnterLink}>Load issues</Button>
       </Flex>
       {repoName && repoOwner ? (
         <Flex gap={5}>
@@ -87,6 +88,6 @@ function App() {
       <Issues />
     </Flex>
   );
-}
+};
 
 export default App;
