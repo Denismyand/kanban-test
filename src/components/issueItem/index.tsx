@@ -23,7 +23,7 @@ export const IssueItem = ({ issue, index }: ItemProps) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <p>{issue.title}</p>
+          <p data-testid={"issueTitle"}>{issue.title}</p>
           <p> {"#" + issue.number + " " + formatDate(issue.created_at)}</p>
           <p>{issue.user.login + " | Comments: " + issue.comments}</p>
         </Flex>

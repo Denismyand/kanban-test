@@ -11,6 +11,7 @@ type IssuesStore = {
   setInProgressIssues: (issues: Issue[]) => void;
   setDoneIssues: (issues: Issue[]) => void;
   setRepo: (owner: null | string, repo: null | string) => void;
+  resetRepo: () => void;
   updateStoredRepo: () => void;
 };
 
@@ -31,6 +32,15 @@ export const useIssuesStore = create<IssuesStore>((set) => ({
   },
   setRepo: (owner, repo) => {
     set(() => ({ repoOwner: owner, repoName: repo }));
+  },
+  resetRepo: () => {
+    set(() => ({
+      todoIssues: [],
+      inProgressIssues: [],
+      doneIssues: [],
+      repoOwner: null,
+      repoName: null,
+    }));
   },
   updateStoredRepo: () => {
     set((state) => {
