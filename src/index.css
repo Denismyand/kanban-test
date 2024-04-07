@@ -2,7 +2,6 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  scrollbar-gutter: stable both-edges;
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -20,11 +19,14 @@ code {
   box-sizing: border-box;
   padding: 20px;
   height: 100dvh;
+  width: 100vw;
   overflow: hidden;
+  background-image: url(/src/assets/bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 /* width */
 ::-webkit-scrollbar {
-  position: absolute;
   width: 7px;
 }
 

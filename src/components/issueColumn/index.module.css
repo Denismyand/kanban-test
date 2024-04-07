@@ -1,25 +1,28 @@
 .issueCategory {
   width: calc(100% / 3);
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.16);
 }
 .title {
-  padding: 7px 0;
+  padding: 10px 0;
   width: 100%;
   text-align: center;
-  background-color: #efefef;
-  font-weight: 600;
+  background-color: rgba(230, 230, 230, 0.7);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 100%;
 }
 .issues {
+  background-color: rgba(230, 230, 230, 0.5);
   display: flex;
   flex-grow: 1;
   flex-direction: column;
   gap: 15px;
-  background-color: #efefef;
   width: 100%;
   padding: 15px;
   overflow-y: auto;
 }
 .dragged {
-  background-color: #dedede;
+  background-color: rgba(200, 200, 200, 0.5);
 }

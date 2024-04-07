@@ -15,6 +15,7 @@ const App = () => {
 
   const setRepo = useIssuesStore((state) => state.setRepo);
   const resetRepo = useIssuesStore((state) => state.resetRepo);
+  const setStars = useIssuesStore((state) => state.setStars);
 
   const updateStoredRepo = useIssuesStore((state) => state.updateStoredRepo);
 
@@ -51,7 +52,8 @@ const App = () => {
     if (storedIssues) {
       setGhLink("");
       setRepo(owner, repo);
-      splitIssues(JSON.parse(storedIssues));
+      splitIssues(JSON.parse(storedIssues).issues);
+      setStars(JSON.parse(storedIssues).stars);
       return;
     }
 
@@ -68,12 +70,20 @@ const App = () => {
       .catch((error) => {
         resetRepo();
       });
+
+    fetch(`https://api.github.com/repos/${owner + "/" + repo}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setStars(data.stargazers_count);
+      })
+      .catch((error) => {});
   };
 
   return (
     <Flex gap={"middle"} vertical className={"app"}>
       <Flex gap={"middle"}>
         <Input
+          className={"url-input"}
           placeholder="Enter repo URL"
           value={ghLink}
           onChange={(e) => {
@@ -81,7 +91,9 @@ const App = () => {
           }}
           onPressEnter={handleEnterLink}
         />
-        <Button onClick={handleEnterLink}>Load issues</Button>
+        <Button onClick={handleEnterLink} className={"load-button"}>
+          Load issues
+        </Button>
       </Flex>
       <RepoInfo repoOwner={repoOwner} repoName={repoName} />
       <Issues />

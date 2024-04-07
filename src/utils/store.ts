@@ -7,12 +7,14 @@ type IssuesStore = {
   doneIssues: Issue[];
   repoOwner: null | string;
   repoName: null | string;
+  stars: null | number;
   setTodoIssues: (issues: Issue[]) => void;
   setInProgressIssues: (issues: Issue[]) => void;
   setDoneIssues: (issues: Issue[]) => void;
   setRepo: (owner: null | string, repo: null | string) => void;
   resetRepo: () => void;
   updateStoredRepo: () => void;
+  setStars: (stars: number) => void;
 };
 
 export const useIssuesStore = create<IssuesStore>((set) => ({
@@ -21,6 +23,7 @@ export const useIssuesStore = create<IssuesStore>((set) => ({
   doneIssues: [],
   repoOwner: null,
   repoName: null,
+  stars: null,
   setTodoIssues: (newTodoIssues) => {
     set(() => ({ todoIssues: newTodoIssues }));
   },
@@ -44,15 +47,18 @@ export const useIssuesStore = create<IssuesStore>((set) => ({
   },
   updateStoredRepo: () => {
     set((state) => {
-      saveIssues(`${state.repoOwner}/${state.repoName}`, [
-        ...state.todoIssues,
-        ...state.inProgressIssues,
-        ...state.doneIssues,
-      ]);
+      saveIssues(
+        `${state.repoOwner}/${state.repoName}`,
+        [...state.todoIssues, ...state.inProgressIssues, ...state.doneIssues],
+        state.stars
+      );
       return state;
     });
   },
+  setStars: (stars) => {
+    set(() => ({ stars: stars }));
+  },
 }));
 
-const saveIssues = (key: string, issues: Issue[]) =>
-  window.localStorage.setItem(key, JSON.stringify(issues));
+const saveIssues = (key: string, issues: Issue[], stars: null | number) =>
+  window.localStorage.setItem(key, JSON.stringify({ stars, issues }));

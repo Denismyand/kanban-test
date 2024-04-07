@@ -1,6 +1,6 @@
 .issueTable {
   width: 100%;
-  max-height: calc(100% - 88px);
+  max-height: calc(100% - 86px);
   flex-grow: 1;
   user-select: none;
   -moz-user-select: none;
